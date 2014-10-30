@@ -5,16 +5,15 @@
 #include "utils/stringUtils.h"
 #include "Object.h"
 #include "file.h"
-#ifdef __APPLE__
+
+#if OX_PLATFORM(MAC)
 #include <unistd.h>
 #endif
-
-
 
 //#define LOGD(...) oxygine::log::messageln(__VA_ARGS__)
 #define LOGD(...) ((void)0)
 
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 	#define USE_S3E_FILE
 	#include "IwAutoFile.h"
 	#include "s3eFile.h"	
@@ -67,7 +66,7 @@
 
 #else
 
-	#ifdef WIN32
+  #if OX_PLATFORM(WINDOWS)
 	#include <direct.h>
 	#endif
 
@@ -89,7 +88,7 @@
 	#define oxExists(name) (true)
 	#define oxFileRead(ptr, size, n, handle) fread(ptr, size, n, handle)
 
-#endif//__S3E__
+#endif
 
 
 //#define LOGD(...) {}
@@ -145,7 +144,7 @@ namespace oxygine
 
 			int seek(unsigned int offset, int whence)
 			{
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 				return oxFileSeek(_handle, offset, (s3eFileSeekOrigin)whence);
 #else
 				return (int)oxFileSeek(_handle, offset, whence);
@@ -223,7 +222,7 @@ namespace oxygine
 			char buff[512];
 			_getFullPath(file, buff);
 
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 			s3eFileDelete(buff);
 #else
 			LOGD("STDFileSystem::_deleteFile %s", buff);
@@ -238,9 +237,9 @@ namespace oxygine
 			char buff[512];
 			_getFullPath(path, buff);
 
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 			s3eFileMakeDirectory(buff);
-#elif WIN32
+#elif OX_PLATFORM(WINDOWS)
 			_mkdir(buff);
 #else
 			mkdir(buff, 0777);
@@ -257,7 +256,7 @@ namespace oxygine
 			char buffDest[512];
 			_getFullPath(dest, buffDest);
 
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 			s3eFileRename(buffSrc, buffDest);
 #else
 			::rename(buffSrc, buffDest);
@@ -270,7 +269,7 @@ namespace oxygine
 		{
 			char buff[512];
 			_getFullPath(file, buff);
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 			s3eBool res = s3eFileCheckExists(buff);
 			return res == S3E_TRUE;
 #else

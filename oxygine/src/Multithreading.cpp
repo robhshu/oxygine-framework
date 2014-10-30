@@ -5,7 +5,7 @@
 #include "Stage.h"
 #include "res/CreateResourceContext.h"
 
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 #include "s3eThread.h"
 #endif
 
@@ -28,7 +28,7 @@ namespace oxygine
 		int s = 0;
 		SDL_WaitThread((SDL_Thread*)t, &s);
 	}
-#elif __S3E__
+#elif OX_PLATFORM(MARMALADE)
 #else
 	typedef int s3eThread;
 	void* s3eThreadCreate(void* (*func)(void*), void *data)

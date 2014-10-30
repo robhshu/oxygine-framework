@@ -1,7 +1,7 @@
 #include "Clock.h"
 #include <sstream>
 
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 #include "s3eTimer.h"
 #endif
 

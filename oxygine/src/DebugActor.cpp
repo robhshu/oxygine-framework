@@ -26,7 +26,7 @@
 #include <stdarg.h>
 #include "MaskedSprite.h"
 
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 #include "s3eMemory.h"
 #endif
 
@@ -238,7 +238,7 @@ namespace oxygine
 
 		
 
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 		int mem_used = -1;
 		int mem_free = -1;
 

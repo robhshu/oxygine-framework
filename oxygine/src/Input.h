@@ -33,7 +33,7 @@ namespace oxygine
 		/**id should be in range [1, MAX_TOUCHES]*/
 		PointerState *getTouchByIndex(int index);
 
-#ifndef __S3E__
+#if !OX_PLATFORM(MARMALADE)
 		int	touchID2index(int id);
 		PointerState *getTouchByID(int id);
 #endif

@@ -6,7 +6,7 @@
 #include "utils/stringUtils.h"
 //#include "utils/utils.h"
 
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 #include "s3eFile.h"
 #endif
 

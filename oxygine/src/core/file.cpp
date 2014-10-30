@@ -6,22 +6,19 @@
 #include "utils/stringUtils.h"
 #include "Object.h"
 
-#if defined(__APPLE__) || defined(ANDROID) || defined(__unix__)
+#if OX_PLATFORM(MAC) || OX_PLATFORM(ANDROID) || OX_PLATFORM(LINUX)
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #endif
 
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 #include <s3eFile.h>
-#else
-#if WIN32
+#elif OX_PLATFORM(WINDOWS)
 #include <direct.h>
 #else
 #include "SDL_system.h"
 #endif
-#endif
-
 
 
 //#define LOGD(...) oxygine::log::messageln(__VA_ARGS__)
@@ -39,18 +36,18 @@ namespace oxygine
 
 		void init()
 		{
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 			_nfs.setPath("rom://");
 			_nfsWrite.setPath("ram://");
 #endif
 
-#ifdef __ANDROID__
+#if OX_PLATFORM(ANDROID)
 			log::messageln("internal %s", SDL_AndroidGetInternalStoragePath());
 			log::messageln("external %s", SDL_AndroidGetExternalStoragePath());
 			_nfsWrite.setPath(SDL_AndroidGetInternalStoragePath());
-#endif // __ANDROID__
+#endif
 
-#ifdef WIN32
+#if OX_PLATFORM(WINDOWS)
 			_mkdir("../data-ram/");
 			_nfsWrite.setPath("../data-ram/");			
 #endif
@@ -201,10 +198,9 @@ namespace oxygine
 
 		void deleteDirectory(const char *path)
 		{
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 			s3eFileDeleteDirectory(path);
-#else
-#ifdef WIN32
+#if OX_PLATFORM(WINDOWS)
 			_rmdir(path);
 #else
 			rmdir(path);

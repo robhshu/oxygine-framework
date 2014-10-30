@@ -4,7 +4,7 @@
 #include "core/oxygine.h"
 #include "core/log.h"
 
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 #include "IwUTF8.h"
 #endif
 
@@ -245,7 +245,7 @@ namespace oxygine
 
 		
 
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 		wchar_t *s = (wchar_t *)fastAlloc(4 * n);
 		s[0] = 0;
 
@@ -282,7 +282,7 @@ namespace oxygine
 			return "";
 
 
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 		char *s = (char *)fastAlloc(4 * n);
 		s[0] = 0;
 

@@ -27,7 +27,7 @@
 #include "winnie_alloc/winnie_alloc.h"
 #include "ThreadMessages.h"
 
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 #include "s3e.h"
 #include "IwGL.h"
 #include "s3eSurface.h"
@@ -41,7 +41,7 @@
 #include "gl/VideoDriverGLES20.h"
 
 
-#ifdef EMSCRIPTEN
+#if OX_PLATFORM(EMSCRIPTEN)
 //#include <EGL/egl.h>
 #include <sys/time.h>
 #include <emscripten.h>
@@ -49,7 +49,7 @@
 #include <SDL_compat.h>
 #endif
 
-#ifdef __ANDROID__
+#if OX_PLATFORM(ANDROID)
 #include "core/android/jniUtils.h"
 #endif
 
@@ -128,8 +128,7 @@ namespace oxygine
 #endif
 	}
 
-
-#if USE_EGL || EMSCRIPTEN
+#if USE_EGL || OX_PLATFORM(EMSCRIPTEN)
 	//EGLDisplay			eglDisplay	= 0;
 	//EGLSurface			eglSurface	= 0;
 
@@ -139,11 +138,11 @@ namespace oxygine
 
 	timeMS getTimeMS()
 	{
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 		return (timeMS)s3eTimerGetUST();
 #elif OXYGINE_SDL
 		return SDL_GetTicks();
-#elif EMSCRIPTEN
+#elif OX_PLATFORM(EMSCRIPTEN)
 		static bool init = false;
 		static struct timespec start_ts;
 		if (!init)
@@ -168,7 +167,7 @@ namespace oxygine
 	core::init_desc desc;
 
 	
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 
 	int32 pointerEvent(void *sysData, void *u)
 	{
@@ -284,7 +283,7 @@ namespace oxygine
 			if (desc_ptr)
 				desc = *desc_ptr;
 
-	#ifdef __S3E__
+  #if OX_PLATFORM(MARMALADE)
             log::messageln("S3E build");
 			if (!IwGLInit())
 			{
@@ -320,10 +319,7 @@ namespace oxygine
 			s3eDeviceRegister(S3E_DEVICE_PAUSE, applicationPause, 0);
 	#endif
 	
-	#if __FLASHPLAYER__
-	#endif
-
-	#if EMSCRIPTEN
+  #if OX_PLATFORM(EMSCRIPTEN)
 			log::messageln("EMSCRIPTEN build");
 
 			if (desc.w == -1 && desc.h == -1)
@@ -432,11 +428,12 @@ namespace oxygine
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 			flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
             
-#if TARGET_OS_IPHONE
+      // hmm
+  #if OX_PLATFORM(IOS)
             flags |= SDL_WINDOW_BORDERLESS;
-#endif            
-	#endif
-            
+  #endif
+
+	#endif    
 
 			SDL_DisplayMode mode;
 			SDL_GetCurrentDisplayMode(0, &mode);
@@ -548,7 +545,7 @@ namespace oxygine
 			log::messageln("display size: %d %d", size.x, size.y);
 
 
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 			int glversion = s3eGLGetInt(S3E_GL_VERSION);
 			int major_gl = glversion >> 8;
 
@@ -560,7 +557,7 @@ namespace oxygine
 				//IVideoDriver::instance = new VideoDriverGLES11();			
 			}
 
-#elif __FLASHPLAYER__
+#elif OX_PLATFORM(FLASH)
 			{
 				VideoDriverStage3D *vd = new VideoDriverStage3D();
 				vd->init();
@@ -594,7 +591,7 @@ namespace oxygine
 
 		}
 
-#if OXYGINE_SDL || EMSCRIPTEN
+#if OXYGINE_SDL || OX_PLATFORM(EMSCRIPTEN)
 		Vector2 convertTouch(SDL_Event& ev)
 		{
 			//log::messageln("convert %.2f %.2f %.2f", ev.tfinger.x, ev.tfinger.y, ev.tfinger.pressure);
@@ -607,11 +604,11 @@ namespace oxygine
 		}
 #endif
 
-#if EMSCRIPTEN
+#if OX_PLATFORM(EMSCRIPTEN)
 		void *_window = 0;
 #endif
 
-#if OXYGINE_SDL || EMSCRIPTEN
+#if OXYGINE_SDL || OX_PLATFORM(EMSCRIPTEN)
 		bool active = true;
 		bool isActive()
 		{
@@ -653,9 +650,9 @@ namespace oxygine
 		void swapDisplayBuffers()
 		{
             checkGLError();
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 			IwGLSwapBuffers();
-#elif USE_EGL || EMSCRIPTEN
+#elif USE_EGL || OX_PLATFORM(EMSCRIPTEN)
 			SDL_GL_SwapBuffers();
 			//eglSwapBuffers(eglDisplay, eglSurface);
 #elif OXYGINE_SDL
@@ -686,8 +683,7 @@ namespace oxygine
 			{
 
 			}
-#ifdef __S3E__
-
+#if OX_PLATFORM(MARMALADE)
 			s3eDeviceYield(0);
 			s3eKeyboardUpdate();
 			s3ePointerUpdate();
@@ -704,7 +700,7 @@ namespace oxygine
 #endif
 
 
-	#if OXYGINE_SDL || EMSCRIPTEN
+  #if OXYGINE_SDL || OX_PLATFORM(EMSCRIPTEN)
 
 			//log::messageln("update");
 			Input *input = &Input::instance;
@@ -867,9 +863,9 @@ namespace oxygine
 
 		void execute(const char *str)
 		{
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 			s3eOSExecExecute(str, false);
-#elif __ANDROID__
+#elif OX_PLATFORM(ANDROID)
 			jniBrowse(str);
 #else
 			OX_ASSERT(!"execute not implemented");
@@ -878,9 +874,8 @@ namespace oxygine
 
 		void requestQuit()
 		{
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 			s3eDeviceRequestQuit();
-
 #endif
 #ifdef OXYGINE_SDL
 			SDL_Event ev;
@@ -897,7 +892,7 @@ namespace oxygine
 		Point _qtFixedSize(0,0);
 		Point getDisplaySize()
 		{
-	#if __S3E__
+  #if OX_PLATFORM(MARMALADE)
 			int width = IwGLGetInt(IW_GL_WIDTH);
 			int height = IwGLGetInt(IW_GL_HEIGHT);
 
@@ -972,17 +967,17 @@ namespace oxygine
 
 	int64	getTimeUTCMS()
 	{
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 		return s3eTimerGetUTC();
-#elif WIN32
+#elif OX_PLATFORM(WINDOWS)
 		FILETIME tm;
 		GetSystemTimeAsFileTime(&tm);
 		int64 t = tm.dwLowDateTime + (int64(tm.dwHighDateTime) << 32);
 		int64 utc = (t - 116444736000000000LL)/10000;
 		return utc;		
-#elif __ANDROID__
+#elif OX_PLATFORM(ANDROID)
 		return jniGetTimeUTCMS();
-#elif EMSCRIPTEN
+#elif OX_PLATFORM(EMSCRIPTEN)
 		struct timeval tv;
 		gettimeofday(&tv, NULL);
 		int64 tm = 
@@ -995,10 +990,10 @@ namespace oxygine
 
 	bool	isNetworkAvaible()
 	{
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 		return s3eSocketGetInt(S3E_SOCKET_NETWORK_AVAILABLE) == 1;
 #endif
-#ifdef __ANDROID__
+#if OX_PLATFORM(ANDROID)
 		return jniIsNetworkAvailable();
 #endif		
 		return true;
@@ -1006,7 +1001,7 @@ namespace oxygine
 
 	std::string		getLanguage()
 	{
-#ifdef __ANDROID__
+#if OX_PLATFORM(ANDROID)
 		return jniGetLanguage();
 #endif		
 		return "en";
@@ -1014,7 +1009,7 @@ namespace oxygine
 
 	void	sleep(timeMS time)
 	{
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 		s3eDeviceYield(time);
 #elif OXYGINE_SDL
 		SDL_Delay(time);

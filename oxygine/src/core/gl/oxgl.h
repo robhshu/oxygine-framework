@@ -2,7 +2,7 @@
 #include "oxygine_include.h"
 
 
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 	#include "IwImage.h"
 	#include "IwGL.h"
 	#include "GLES/gl.h"

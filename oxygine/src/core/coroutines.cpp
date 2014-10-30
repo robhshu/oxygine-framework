@@ -2,7 +2,7 @@
 #include "Tweener.h"
 #include "Clock.h"
 
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 #include "IwFibre.h"
 #elif OXYGINE_SDL
 //#include "greenlet.h"
@@ -18,7 +18,7 @@ namespace oxygine
 
 		handle current()
 		{
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 			handle f = (handle)IwFibreGetCurrent();
 			return f;
 #else
@@ -29,7 +29,7 @@ namespace oxygine
 
 		handle create(fiberFunc func, int stackSize, void *param)
 		{
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 			handle f = (handle)IwFibreCreate(func, stackSize, param, 0);	
 			return f;
 #elif GREENLETS
@@ -43,7 +43,7 @@ namespace oxygine
 
 		void terminate(handle fiber, int data)
 		{
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 			if (data)
 				resume(fiber, data);
 			IwFibreJoin((IwFibre*)fiber);
@@ -57,7 +57,7 @@ namespace oxygine
 		{
 			fiberPassData = data;
 			int r = 0;
-#if __S3E__
+#if OX_PLATFORM(MARMALADE)
 			IwFibreYield((IwFibre*)fiber);
 #elif GREENLETS
 			if (!fiber)

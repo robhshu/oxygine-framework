@@ -13,7 +13,7 @@
 #include "ThreadMessages.h"
 #include <string>
 
-#ifndef __S3E__
+#if !OX_PLATFORM(MARMALADE)
 #if defined(_MSC_VER) || defined(__BORLANDC__)
 	typedef unsigned __int64 uint64;
 	typedef signed __int64 int64;

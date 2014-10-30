@@ -4,16 +4,12 @@
 #include <stdarg.h>
 #include <string.h>
 
-
-
-
-#if defined(ANDROID)
+#if OX_PLATFORM(ANDROID)
 #include <android/log.h>
 #define  LOG_TAG    "SDL"
 #define  LOGD(str)  __android_log_write(ANDROID_LOG_DEBUG, LOG_TAG, str)
-
 #else
-#ifdef WIN32
+#ifdef OX_PLATFORM(WINDOWS)
 #include <Windows.h>
 #define LOGD(str) fputs(str, stdout); OutputDebugStringA(str);
 #else
@@ -28,15 +24,13 @@ namespace oxygine
 	bool _enabled = true;
 	FILE *fh = 0;
 
-	
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 	const int SIZE = 512;
+#elif OX_DEBUG
+  // Pretty hefty
+	const int SIZE ( 1024 * 8 );
 #else
-#ifdef OX_DEBUG
-	const int SIZE = 16384;
-#else
-	const int SIZE = 4096;
-#endif
+	const int SIZE ( 1024 * 4 );
 #endif
 
 	namespace log

@@ -12,7 +12,7 @@
 #include "core/VideoDriver.h"
 #include "core/Renderer.h"
 
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 #include "IwImage.h"
 #endif
 

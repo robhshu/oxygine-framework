@@ -10,7 +10,7 @@ extern "C"
 };
 
 
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 #include "IwImage.h"
 #endif
 
@@ -18,7 +18,7 @@ namespace oxygine
 {
 	void saveImage(const ImageData &im, const char *path, const char *format)
 	{
-#ifdef __S3E__
+#if OX_PLATFORM(MARMALADE)
 		CIwImage image;
 		image.SetFormat(CIwImage::ABGR_8888);
 		image.SetWidth(im.w);

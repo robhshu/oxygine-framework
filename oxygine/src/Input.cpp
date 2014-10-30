@@ -92,7 +92,7 @@ namespace oxygine
 		return &_pointers[index];
 	}
 
-#ifndef __S3E__
+#if !OX_PLATFORM(MARMALADE)
 	int Input::touchID2index(int id)
 	{
 		id += 1;//id could be = 0 ?
