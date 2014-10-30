@@ -14,9 +14,10 @@
 #define OXYGINE_FLASH 3
 #define OXYGINE_WINDOWS 4
 #define OXYGINE_MAC 5
-#define OXYGINE_LINUX 6
+#define OXYGINE_POSIX 6
 #define OXYGINE_ANDROID 7
 #define OXYGINE_IOS 8
+#define OXYGINE_LINUX OXYGINE_POSIX
 
 #if __S3E__
   #define OXYGINE_PLATFORM OXYGINE_MARMALADE
@@ -30,10 +31,19 @@
 	#endif // DEBUG	
 #elif ANDROID
   #define OXYGINE_PLATFORM OXYGINE_ANDROID
-#elif TARGET_OS_IPHONE
-  #define OXYGINE_PLATFORM OXYGINE_IOS
+#elif __APPLE__
+  // http://stackoverflow.com/a/5920028
+  #include "TargetConditionals.h"
+  #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+    // Not using SDL?
+    #define OXYGINE_PLATFORM OXYGINE_IOS
+  #else
+    // Using SDL
+    #define OXYGINE_SDL 1
+    #define OXYGINE_PLATFORM OXYGINE_MAC
+  #endif
 #else
-  // Windows/Mac/Linux using DLC
+  // Using SDL
 	#define OXYGINE_SDL 1
 	
   #ifdef WIN32
@@ -41,17 +51,14 @@
 		#ifndef _CRT_SECURE_NO_WARNINGS
 			#define _CRT_SECURE_NO_WARNINGS
 		#endif
-  #elif __unix__
-    // guesswork    
-    #define OXYGINE_PLATFORM OXYGINE_LINUX
-  #elif __APPLE__
-    // guesswork
-    #define OXYGINE_PLATFORM OXYGINE_MAC
+  #elif __linux || __unix__
+    // Temp.
+    #define OXYGINE_PLATFORM OXYGINE_POSIX
 	#endif
 #endif
 
 #ifndef OXYGINE_PLATFORM
-#error "Could not detect Oxygine platform"
+#error "Could not detect platform for Oxygine"
 #endif
 
 // Macro to check that the platform is the current build target
