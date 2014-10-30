@@ -8,16 +8,12 @@
 #include <android/log.h>
 #define  LOG_TAG    "SDL"
 #define  LOGD(str)  __android_log_write(ANDROID_LOG_DEBUG, LOG_TAG, str)
-#else
-#ifdef OX_PLATFORM(WINDOWS)
+#elif OX_PLATFORM(WINDOWS)
 #include <Windows.h>
 #define LOGD(str) fputs(str, stdout); OutputDebugStringA(str);
 #else
 #define LOGD(str) fputs(str, stdout)
 #endif
-#endif
-
-
 
 namespace oxygine
 {

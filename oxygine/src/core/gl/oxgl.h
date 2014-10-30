@@ -8,7 +8,7 @@
 	#define GL_GLEXT_PROTOTYPES
 	#include "GLES/glext.h"
 	#include <gles/egl.h>
-#else
+#elif OXYGINE_SDL
 	#include "SDL_config.h"
 
   #if OX_PLATFORM(WINDOWS)
