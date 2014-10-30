@@ -77,7 +77,7 @@ namespace oxygine
 		ptr++;
 #endif
 
-#ifdef EMSCRIPTEN
+#if OX_PLATFORM(EMSCRIPTEN)
 		*ptr = "precision float mediump;";
 #endif
 

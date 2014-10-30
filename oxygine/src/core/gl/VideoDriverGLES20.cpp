@@ -14,8 +14,7 @@
 #include "SDL_config.h"
 #endif
 
-
-#ifdef __ANDROID__
+#if OX_PLATFORM(ANDROID)
 #include "GLES2/gl2.h"
 #endif
 

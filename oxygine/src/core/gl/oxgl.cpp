@@ -1,7 +1,7 @@
 #include "oxgl.h"
 #include "../ox_debug.h"
 
-#ifdef WIN32
+#if OX_PLATFORM(WINDOWS)
 #include "SDL_video.h"
 
 //fix compile time error with latest SDL

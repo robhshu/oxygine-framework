@@ -32,7 +32,7 @@
 	#define oxExists(name) s3eFileCheckExists(name)
 
 #elif OXYGINE_SDL
-	#ifdef WIN32
+  #if OX_PLATFORM(WINDOWS)
 		#include <direct.h>
 	#endif
 

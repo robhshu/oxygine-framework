@@ -1,7 +1,6 @@
 #pragma once
 #include "oxygine_include.h"
 
-
 #if OX_PLATFORM(MARMALADE)
 	#include "IwImage.h"
 	#include "IwGL.h"
@@ -12,7 +11,7 @@
 #else
 	#include "SDL_config.h"
 
-	#if WIN32
+  #if OX_PLATFORM(WINDOWS)
         #define GL_GLEXT_PROTOTYPES
 		#include "SDL_opengl.h"
 
@@ -23,7 +22,7 @@
 
 		#define GL_ETC1_RGB8_OES                                        0x8D64
 
-	#elif __ANDROID__
+	#elif OX_PLATFORM(ANDROID)
 		#include "GLES2/gl2.h"
 		#define GL_GLEXT_PROTOTYPES
 		#include "GLES2/gl2ext.h"
@@ -40,9 +39,9 @@
 		#define GL_COLOR_ATTACHMENT0		GL_COLOR_ATTACHMENT0
 		#define GL_FRAMEBUFFER_COMPLETE		GL_FRAMEBUFFER_COMPLETE
 		*/
-	#elif __APPLE__
+  #elif OX_PLATFORM(MAC)
 	    #include <TargetConditionals.h>
-		#if TARGET_OS_IPHONE
+    #if OX_PLATFORM(IPHONE)
 		    #define GL_ETC1_RGB8_OES                                        0x8D64
 		    #include <OpenGLES/ES2/gl.h>
 		    #include <OpenGLES/ES2/glext.h>
@@ -59,7 +58,7 @@
 
 		    #define GL_ETC1_RGB8_OES                                        0x8D64
 		#endif
-	#elif EMSCRIPTEN
+  #elif OX_PLATFORM(EMSCRIPTEN)
 		#include "GLES2/gl2.h"
 		#define GL_GLEXT_PROTOTYPES
 		#include "GLES2/gl2ext.h"
@@ -70,7 +69,7 @@
 		#define glDeleteFramebuffers		glDeleteFramebuffers
 		#define glCheckFramebufferStatus	glCheckFramebufferStatus
 
-	#elif __unix__
+  #elif OX_PLATFORM(LINUX)
 		#define GL_GLEXT_PROTOTYPES
 		#include "SDL_opengl.h"
 

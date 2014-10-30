@@ -816,7 +816,7 @@ namespace oxygine
 
 
 			return done;
-	#elif EMSCRIPTEN
+  #elif OX_PLATFORM(EMSCRIPTEN)
 			return false;
 	#endif
 
@@ -925,11 +925,11 @@ namespace oxygine
 			return Point(w, h);
 	#endif
 
-	#if EMSCRIPTEN
+  #if OX_PLATFORM(EMSCRIPTEN)
 			return _displaySize;
 	#endif
 
-	#if	__FLASHPLAYER__
+  #if	OX_PLATFORM(FLASH)
 			return Point(800, 600);
 	#endif
 			log::warning("getDisplaySize not implemented");
